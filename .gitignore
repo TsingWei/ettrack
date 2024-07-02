@@ -9,3 +9,5 @@ logs/
 result_plots/
 segmentation_results/
 */logs/
+*/__pycache__
+.vscode/

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch._six import container_abcs
+# from torch._six import container_abcs
 from torch import einsum
 
 from itertools import repeat
@@ -11,6 +11,14 @@ import numpy as np
 import math
 
 from lib.models.activations import *
+
+TORCH_MAJOR = int(torch.__version__.split('.')[0])
+TORCH_MINOR = int(torch.__version__.split('.')[1])
+if TORCH_MAJOR == 1 and TORCH_MINOR < 8:
+    from torch._six import container_abcs
+else:
+    import collections.abc as container_abcs
+
 
 def _ntuple(n):
     def parse(x):
@@ -200,7 +208,7 @@ class ExemplarTransformer(nn.Module):
 
         # outer product with keys
         #qk = einsum('b n c, k c -> b n k', q, self.K) # K^T: [C, K] QK^T: [B,S,K]
-        qk = torch.matmul(q, self.K.T)
+        qk = torch.matmul(q, self.K.transpose(-1,-2))
         
         if self.sm_norm:
             qk = 1/math.sqrt(d_k) * qk

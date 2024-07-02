@@ -5,16 +5,16 @@ import torch.nn.functional as F
 import numpy as np
 
 from typing import Tuple, Optional, List
-from torch._six import container_abcs
+# from torch._six import container_abcs
 from itertools import repeat
 
-def _ntuple(n):
-    def parse(x):
-        if isinstance(x, container_abcs.Iterable):
-            return x
-        return tuple(repeat(x, n))
-    return
-tup_pair = _ntuple(2)
+# def _ntuple(n):
+#     def parse(x):
+#         if isinstance(x, container_abcs.Iterable):
+#             return x
+#         return tuple(repeat(x, n))
+#     return
+# tup_pair = _ntuple(2)
 
 def get_same_padding(x: int, k: int, s: int, d: int):
     return max((math.ceil(x / s) - 1) * s + (k - 1) * d + 1 - x, 0)

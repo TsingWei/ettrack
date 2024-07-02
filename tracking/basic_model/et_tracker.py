@@ -71,12 +71,12 @@ class ET_Tracker(Super_model_DP):
 
 
 
-    def forward(self, template, search, label=None, reg_target=None, reg_weight=None):
+    def forward(self, zf, search, label=None, reg_target=None, reg_weight=None):
         
         torch.autograd.set_detect_anomaly(True)
 
         # extract features 
-        zf = self.backbone_net(template)
+        # zf = self.backbone_net(template)
         xf = self.backbone_net(search)  
 
         # Batch Normalization before Corr
@@ -128,14 +128,16 @@ class ET_Tracker(Super_model_DP):
         '''
         Used during the tracking -> computes the embedding of the target in the first frame.
         '''
-        self.zf = self.backbone_net(z)
+        # self.zf = self.backbone_net(z)
+        zf = self.backbone_net(z)
+        return zf
 
-    def track(self, x):
+    def track(self, x, zf):
        
         xf = self.backbone_net(x)  
 
         # Batch Normalization before Corr
-        zf, xf = self.neck(self.zf, xf) 
+        zf, xf = self.neck(zf, xf) 
 
         # pixelwise correlation
         feat_dict = self.feature_fusor(zf, xf) 
